@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Bori ❤️</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fireworks -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* --- 1. GALACTIC THEME --- */
+        :root {
+            --bg: #2d0000; /* Deepest Maroon (almost black) */
+            --card-bg: rgba(80, 0, 0, 0.6);
+            --gold: #ffd700;
+            --pink: #ff99ac;
+            --neon: #ff004c;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Hide default cursor */ }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- 2. MAGIC CURSOR --- */
+        #cursor {
+            position: fixed; top: 0; left: 0; width: 20px; height: 20px;
+            border: 2px solid var(--pink); border-radius: 50%;
+            transform: translate(-50%, -50%); pointer-events: none; z-index: 9999;
+            transition: width 0.2s, height 0.2s;
+            box-shadow: 0 0 10px var(--pink);
+        }
+        #cursor-trail {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9998;
+        }
+
+        /* --- 3. INTRO BLACK HOLE --- */
+        #intro-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 5000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+        
+        .pulse-btn {
+            width: 100px; height: 100px; background: var(--pink);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 0 0 rgba(255, 153, 172, 0.7);
+            animation: pulse-red 1.5s infinite; cursor: pointer;
+        }
+        .pulse-btn i { font-size: 2rem; color: #500000; }
+
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 153, 172, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 30px rgba(255, 153, 172, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 153, 172, 0); }
+        }
+
+        /* --- 4. HERO --- */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            background: radial-gradient(circle at center, #500000 0%, #2d0000 70%);
+        }
+        
+        .glowing-text {
+            font-family: 'Dancing Script', cursive; font-size: 4rem;
+            color: #fff; text-shadow: 0 0 10px var(--pink), 0 0 20px var(--neon), 0 0 40px var(--neon);
+            animation: flicker 3s infinite alternate;
+        }
+
+        .subtitle {
+            margin-top: 20px; font-size: 1.2rem; letter-spacing: 2px;
+            color: var(--pink); border-top: 1px solid var(--pink); padding-top: 20px;
+        }
+
+        @keyframes flicker { 0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; } 20%, 24%, 55% { opacity: 0.5; } }
+
+        /* --- 5. NEON TIMELINE --- */
+        section { padding: 100px 20px; max-width: 1000px; margin: 0 auto; }
+        .section-title { 
+            text-align: center; font-size: 3.5rem; font-family: 'Dancing Script', cursive;
+            margin-bottom: 80px; color: var(--gold); text-shadow: 0 0 10px var(--gold);
+        }
+
+        .neon-card {
+            background: var(--card-bg); backdrop-filter: blur(10px);
+            border: 1px solid var(--pink); border-radius: 15px;
+            padding: 30px; margin-bottom: 50px; position: relative;
+            box-shadow: 0 0 15px rgba(255, 0, 76, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .neon-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 0 30px rgba(255, 0, 76, 0.6); }
+        
+        .neon-card h3 { font-size: 2rem; color: var(--pink); margin-bottom: 10px; font-family: 'Dancing Script', cursive; }
+        .neon-card p { font-size: 1.1rem; line-height: 1.8; color: #eee; }
+
+        /* --- 6. 3D ENVELOPE (The Crazy Part) --- */
+        .envelope-wrapper {
+            display: flex; justify-content: center; align-items: center; height: 400px;
+            perspective: 1000px;
+        }
+
+        .envelope {
+            position: relative; width: 300px; height: 200px; background: #c0392b;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: transform 0.5s; cursor: pointer;
+        }
+        
+        .envelope:hover { transform: translateY(-5px); }
+
+        .lid {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #e74c3c; transform-origin: top; transition: transform 0.5s 0.5s, z-index 0.2s 0.5s;
+            clip-path: polygon(0 0, 100% 0, 50% 50%); z-index: 4;
+        }
+
+        .envelope.open .lid { transform: rotateX(180deg); z-index: 1; }
+
+        .pocket {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #c0392b; clip-path: polygon(0 0, 50% 50%, 100% 0, 100% 100%, 0 100%);
+            z-index: 3;
+        }
+
+        .letter-content {
+            position: absolute; top: 10px; left: 10px; width: 280px; height: 180px;
+            background: white; padding: 20px; color: black; font-size: 0.8rem;
+            transition: transform 0.5s; z-index: 2; overflow: hidden;
+            display: flex; flex-direction: column; justify-content: center; text-align: center;
+        }
+
+        .envelope.open .letter-content { transform: translateY(-150px); z-index: 5; height: auto; min-height: 300px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+        /* --- 7. MAKE A WISH --- */
+        .star-container { text-align: center; margin: 50px 0; }
+        .magic-star {
+            font-size: 5rem; color: #333; cursor: pointer; transition: all 0.5s;
+            text-shadow: 0 0 5px white;
+        }
+        .magic-star.lit { color: var(--gold); text-shadow: 0 0 50px var(--gold), 0 0 100px orange; animation: spinStar 2s infinite linear; }
+        @keyframes spinStar { 100% { transform: rotate(360deg); } }
+
+        /* --- MOBILE TWEAKS --- */
+        @media (max-width: 600px) {
+            .glowing-text { font-size: 3rem; }
+            .envelope-wrapper { height: 500px; }
+            .envelope.open .letter-content { width: 90vw; transform: translateY(-100px) scale(1.1); left: -10vw; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. CUSTOM CURSOR -->
+    <div id="cursor"></div>
+    <canvas id="cursor-trail"></canvas>
+
+    <!-- 2. INTRO BLACK HOLE -->
+    <div id="intro-layer">
+        <div class="pulse-btn" onclick="blastOff()">
+            <i class="fas fa-heart"></i>
+        </div>
+        <p style="margin-top: 20px; letter-spacing: 2px; color: #aaa;">TAP THE HEART</p>
+    </div>
+
+    <!-- 3. HERO -->
+    <header class="hero">
+        <h1 class="glowing-text" id="greeting">Happy Birthday,<br>Bori</h1>
+        <p class="subtitle">"Apko nahi pata hai ap mere liya kitna jayada Important ho"</p>
+        <i class="fas fa-chevron-down" style="position: absolute; bottom: 30px; animation: bounce 2s infinite; color: var(--pink);"></i>
+    </header>
+
+    <!-- 4. NEON TIMELINE -->
+    <section>
+        <h2 class="section-title">Our Galaxy</h2>
+        
+        <div class="neon-card">
+            <h3>Sahil</h3>
+            <p>Jab hame dono milta tha to Bass do anjaan log tha bass isa khyal ke sath ki kya hame open up hona chahiye? kya ye insaan sahi hai?</p>
+        </div>
+
+        <div class="neon-card">
+            <h3>Ashiyana</h3>
+            <p>Hame dono ak dusre ko jaan chuka hai ki, ak dusre ke safe space hai 🤌🏼</p>
+        </div>
+
+        <div class="neon-card">
+            <h3>Dastane Bori</h3>
+            <p>Bori ki shuruwat to bass ak tont se hui thi 😁, Par ab bori keval ak world nahi hai vo khud me hi ak Emotion ban chuka hai🙌🏼,<br><br>
+            Pyar a raha hai bori bol deta hu 🤗,<br>
+            gussa a rahi hai bori bol deta hu 😑,<br>
+            Miss kar raha hu bori bol deta hu 🥺,<br>
+            ab bori khud me hi ak Dastan hai 😎</p>
+        </div>
+
+        <div class="neon-card">
+            <h3>Hisaar-e-Ishq</h3>
+            <p>Yaha tak ata ata dono ke din me kuch to ho gaya tha 🙈</p>
+        </div>
+
+        <div class="neon-card">
+            <h3>Tasleem-e-Ishq</h3>
+            <p>Mere izhaar ne jo dastak di dil par, tumne bhi khamoshi tod di.<br>Haath badhaya tha humne jo mohabbat ka, aaj tumne bhi use thaam li 💫</p>
+        </div>
+
+        <div class="neon-card">
+            <h3>Duriya-e-Fasla</h3>
+            <p>Yaha dono thoda realistic hoke sochata hai ki kahi ye jaldi to Nahi hai, Aur bori ko time chahiye tha 🤌🏼</p>
+        </div>
+
+        <div class="neon-card">
+            <h3>Mohabbat</h3>
+            <p>I even fall more in love.</p>
+        </div>
+
+        <div class="neon-card">
+            <h3>Mohabbat ki Kashti</h3>
+            <p>Na hum sirf dost hain, na rishte ko naam diya,<br>
+            bas ek-dusre ko samajhne ka silsila shuru kiya.<br>
+            Is beech ke har pal, har baat ne dheere-dheere,<br>
+            humein aur zyada apna, aur zyada mohabbat se bhara diya 🤌🏼</p>
+        </div>
+    </section>
+
+    <!-- 5. MAGIC STAR -->
+    <section style="text-align: center;">
+        <h2 class="section-title">Make a Wish</h2>
+        <p>Touch the star to ignite it!</p>
+        <div class="star-container">
+            <i class="fas fa-star magic-star" id="star" onclick="lightStar()"></i>
+        </div>
+        <div id="wish-text" style="opacity: 0; color: var(--gold); font-size: 1.5rem; transition: opacity 1s;">
+            May your light shine forever, Inshallah! ✨
+        </div>
+    </section>
+
+    <!-- 6. 3D ENVELOPE -->
+    <section>
+        <h2 class="section-title">A Message</h2>
+        <div class="envelope-wrapper">
+            <div class="envelope" onclick="openLetter(this)">
+                <div class="lid"></div>
+                <div class="letter-content">
+                    <p style="font-family: 'Poppins', serif; font-size: 0.9rem; line-height: 1.6; text-align: left;">
+                        <strong>To, The Bori</strong><br>
+                        <strong>Subject:</strong> Happy Birthday<br><br>
+                        Dear Bori,<br>
+                        Happy Birthday mere jaan, apko apke janamdin ki bahut dher sari mubarakbaad. Mere dua hai ap apna har sapna ko hasil kare aur jindagi me khush rahe.<br><br>
+                        Thank you,<br>
+                        <strong>Bora</strong>
+                    </p>
+                </div>
+                <div class="pocket"></div>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: 50px; color: #888;">(Tap the envelope to open)</p>
+    </section>
+
+    <footer style="text-align: center; padding: 50px; color: var(--pink);">
+        <p>Made with ❤️ specifically for Bori.</p>
+        <h2>I Love You</h2>
+    </footer>
+
+    <script>
+        // --- 1. CURSOR TRAIL LOGIC ---
+        const cursor = document.getElementById('cursor');
+        const canvas = document.getElementById('cursor-trail');
+        const ctx = canvas.getContext('2d');
+        let points = [];
+
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            points.push({x: e.clientX, y: e.clientY, age: 0});
+        });
+
+        function animateTrail() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            
+            for (let i = 0; i < points.length; i++) {
+                const p = points[i];
+                p.age++;
+                if (p.age > 20) { points.splice(i, 1); i--; continue; }
+                
+                ctx.fillStyle = `rgba(255, 153, 172, ${1 - p.age/20})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 10 - p.age/2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            requestAnimationFrame(animateTrail);
+        }
+        animateTrail();
+
+        // --- 2. BLAST OFF INTRO ---
+        function blastOff() {
+            const layer = document.getElementById('intro-layer');
+            layer.style.transform = 'translateY(-100%)';
+            
+            // Explosion
+            var duration = 3 * 1000;
+            var end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff004c', '#ff99ac'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff004c', '#ff99ac'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        // --- 3. STAR LOGIC ---
+        function lightStar() {
+            const star = document.getElementById('star');
+            star.classList.add('lit');
+            document.getElementById('wish-text').style.opacity = '1';
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#ffd700', '#ffffff'] });
+        }
+
+        // --- 4. ENVELOPE LOGIC ---
+        function openLetter(el) {
+            if (!el.classList.contains('open')) {
+                el.classList.add('open');
+            } else {
+                el.classList.remove('open');
+            }
+        }
+    </script>
+</body>
+</html>
